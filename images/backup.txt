@@ -1,0 +1,184 @@
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Effects
+
+Item {
+    width: parent.width
+    height: parent.height
+    property int currentIndex: 0
+
+    property var albums: [
+        { title: "ya hasra - BALTI ", image: "file:///C:/Users/fedikk/Documents/Cockpit/images/balti1.jpg" },
+        { title: "Trafiquant - SAMARA", image: "file:///C:/Users/fedikk/Documents/Cockpit/images/samara1.jpg" },
+        { title: "7 years - SAMARA", image: "file:///C:/Users/fedikk/Documents/Cockpit/images/samara2.jpg" },
+        { title: "Alo Alo - BALTI", image: "file:///C:/Users/fedikk/Documents/Cockpit/images/balti2.jpg" },
+        { title: "Layem - Nordo", image: "file:///C:/Users/fedikk/Documents/Cockpit/images/nordo.jpg" },
+    ]
+
+    Rectangle {
+        anchors.fill: parent
+        color: "#2ea3dd"
+        z: -1
+    }
+
+    Column {
+        anchors.fill: parent
+        spacing: 20
+        anchors.margins: 20
+
+        // 🎵 Album Cards Row (Prev - Current - Next)
+        Row {
+            id: albumRow
+            spacing: 20
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            // 2nd Previous album (looped)
+            Rectangle {
+                width: 280
+                height: 280
+                anchors.verticalCenter: albumCard.verticalCenter
+                radius: 15
+                color: "transparent"
+                opacity: 0.3
+                Image {
+                    anchors.fill: parent
+                    anchors.margins: 5
+                    source: albums[(currentIndex - 2 + albums.length) % albums.length].image
+                    fillMode: Image.PreserveAspectFit
+                }
+            }
+
+            // Previous album (looped)
+            Rectangle {
+                width: 280
+                height: 280
+                anchors.verticalCenter: albumCard.verticalCenter
+                radius: 15
+                color: "transparent"
+                opacity: 0.3
+                Image {
+                    anchors.fill: parent
+                    anchors.margins: 5
+                    source: albums[(currentIndex - 1 + albums.length) % albums.length].image
+                    fillMode: Image.PreserveAspectFit
+                }
+            }
+
+            // Current album
+            Rectangle {
+                id: albumCard
+                width: 300
+                height: 300
+                radius: 20
+                color: "#29293d"
+                opacity: 1.0
+
+                Image {
+                    anchors.fill: parent
+                    anchors.margins: 5
+                    source: albums[currentIndex].image
+                    fillMode: Image.PreserveAspectFit
+                }
+
+                MultiEffect {
+                    anchors.fill: albumCard
+                    source: albumCard
+                    // You can uncomment and adjust if you want glow
+                    // Glow {
+                    //     glowColor: "#00cfff"
+                    //     radius: 15
+                    //     strength: 0.5
+                    // }
+                }
+            }
+
+            // Next album (looped)
+                Rectangle {
+                width: 280
+                height: 280
+                anchors.verticalCenter: albumCard.verticalCenter
+                radius: 15
+                color: "transparent"
+                opacity: 0.3
+                Image {
+                    anchors.fill: parent
+                    anchors.margins: 5
+                    source: albums[(currentIndex + 1) % albums.length].image
+                    fillMode: Image.PreserveAspectFit
+                }
+            }
+            // Next album (looped)
+                    Rectangle {
+                    width: 280
+                    height: 280
+                    anchors.verticalCenter: albumCard.verticalCenter
+                    radius: 15
+                    color: "transparent"
+                    opacity: 0.3
+                    Image {
+                        anchors.fill: parent
+                        anchors.margins: 5
+                        source: albums[(currentIndex + 2) % albums.length].image
+                        fillMode: Image.PreserveAspectFit
+                    }
+                }
+        }
+
+        // 🧱 Spacer (optional)
+        Item {
+            id: spacer
+        }
+
+        // 🎛️ Music Info + Controls at Bottom
+        Rectangle {
+            width:  400
+            height: 160
+            radius: 10
+            color: "#1a1a28"
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            Column {
+                anchors.fill: parent
+                anchors.margins: 20
+                spacing: 10
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Text {
+                    text: albums[currentIndex].title
+                    color: "white"
+                    font.pixelSize: 16
+                    horizontalAlignment: Text.AlignHCenter
+                    width: parent.width
+                    wrapMode: Text.Wrap
+                }
+
+                Slider {
+                    width: parent.width * 0.8
+                    from: 0
+                    to: 100
+                    value: 40
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                Row {
+                    spacing: 20
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    Button {
+                        text: "⏮"
+                        onClicked: currentIndex = (currentIndex === 0) ? albums.length - 1 : currentIndex - 1
+                    }
+
+                    Button { text: "⏯" }
+
+                    Button {
+                        text: "⏭"
+                        onClicked: currentIndex = (currentIndex === albums.length - 1) ? 0 : currentIndex + 1
+                    }
+
+                    Button { text: "🔁" }
+                }
+            }
+        }
+    }
+}

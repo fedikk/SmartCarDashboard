@@ -1,0 +1,2 @@
+- time progress bar music as wave bar 
+- flmselection add the genre of film on top 
